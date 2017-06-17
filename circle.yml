@@ -4,7 +4,10 @@ machine:
 
 dependencies:
   pre:
-    - curl -sf -L https://static.rust-lang.org/rustup.sh | sh /dev/stdin --channel=nightly --yes
+    - |
+      if [ ! -x cargo ]; then
+        curl -sf -L https://static.rust-lang.org/rustup.sh | sh /dev/stdin --channel=nightly --yes
+      fi
   override:
     - cargo build
 
