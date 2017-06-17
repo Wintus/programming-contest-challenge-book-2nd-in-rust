@@ -1,0 +1,6 @@
+[package]
+name = "programming-contest-challenge-book-2nd-in-rust"
+version = "0.1.0"
+authors = ["Yuya <yuya.maemichi@gmail.com>"]
+
+[dependencies]
