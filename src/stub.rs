@@ -11,7 +11,10 @@ struct Premise {}
 struct Solution {}
 
 impl cmp::PartialEq for Solution {
-    fn eq(&self, other: &Solution) -> bool { true }
+    fn eq(&self, other: &Solution) -> bool {
+        let _other = other;
+        true
+    }
 }
 
 impl Problem {
