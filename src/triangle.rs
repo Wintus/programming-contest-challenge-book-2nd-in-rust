@@ -1,32 +1,18 @@
-use std::cmp;
-
 struct Problem {
     premise: Premise
 }
 
-struct Premise {}
-
-#[derive(Debug)]
-#[derive(Eq)]
-struct Solution {}
-
-impl cmp::PartialEq for Solution {
-    fn eq(&self, other: &Solution) -> bool {
-        let _other = other;
-        true
-    }
+struct Premise {
+    sides: Vec<u32>
 }
 
 impl Problem {
-    fn solve(&self) -> Solution {
-        Solution {}
-    }
+    fn solve(&self) -> bool {}
 }
 
 #[test]
 fn test_case_0() {
-    let premise = Premise {};
-    let solution = Solution {};
+    let premise = Premise { sides: vec![2, 3, 4, 5, 10] };
     let problem = Problem { premise: premise };
-    assert_eq!(solution, problem.solve());
+    assert_eq!(12, problem.solve());
 }
