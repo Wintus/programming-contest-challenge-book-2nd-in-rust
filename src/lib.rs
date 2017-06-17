@@ -8,3 +8,6 @@ mod triangle;
 
 #[allow(dead_code)]
 mod ants;
+
+#[allow(dead_code)]
+mod lottery;
