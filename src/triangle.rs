@@ -1,3 +1,5 @@
+use std::cmp;
+
 struct Problem {
     premise: Premise
 }
@@ -7,7 +9,33 @@ struct Premise {
 }
 
 impl Problem {
-    fn solve(&self) -> bool {}
+    fn solve(&self) -> u32 {
+        let mut max_perimeter = 0;
+        let ref sides = self.premise.sides;
+
+        // TODO: use permutation
+        let last_index = sides.len() - 1;
+        for i in 0..last_index {
+            for j in (i + 1)..last_index {
+                for k in (j + 1)..last_index {
+                    let sides: [u32; 3] = [
+                        *sides.get(i).unwrap(),
+                        *sides.get(j).unwrap(),
+                        *sides.get(k).unwrap(),
+                    ];
+
+                    let perimeter = sides.iter().sum::<u32>();
+                    let max_side = *sides.iter().max().unwrap();
+                    let rest = perimeter - max_side;
+
+                    if max_side < rest {
+                        max_perimeter = cmp::max(max_perimeter, perimeter);
+                    };
+                }
+            }
+        }
+        max_perimeter
+    }
 }
 
 #[test]
