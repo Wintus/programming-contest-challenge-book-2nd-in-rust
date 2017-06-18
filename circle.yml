@@ -10,7 +10,7 @@ dependencies:
     - ~/.cargo/bin
   pre:
     - |
-      if [ ! -x cargo ]; then
+      if [ ! -x `which cargo` ]; then
         curl -sSf https://sh.rustup.rs | sh /dev/stdin -y
       fi
   override:
