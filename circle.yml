@@ -13,6 +13,7 @@ dependencies:
       if [ ! -x `which cargo` ]; then
         curl -sSf https://sh.rustup.rs | sh /dev/stdin -y
       fi
+    - rustup install stable
   override:
     - cargo build
 
