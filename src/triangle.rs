@@ -44,3 +44,10 @@ fn test_case_0() {
     let problem = Problem { premise: premise };
     assert_eq!(12, problem.solve());
 }
+
+#[test]
+fn test_case_1() {
+    let premise = Premise { sides: vec![4, 5, 10, 20] };
+    let problem = Problem { premise: premise };
+    assert_eq!(0, problem.solve()); // = never
+}
