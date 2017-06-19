@@ -2,8 +2,6 @@ machine:
   environment:
     CARGO_HOME: $HOME/.cargo
     PATH: $PATH:$CARGO_HOME/bin
-  services:
-    - docker
 
 dependencies:
   cache_directories:
