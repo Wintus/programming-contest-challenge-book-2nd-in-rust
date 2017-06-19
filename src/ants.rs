@@ -29,17 +29,17 @@ struct Ant {
 impl Problem {
     fn solve(&self) -> Solution {
         // alias names
-        let ref rod = self.premise.rod;
+        let rod_len = self.premise.rod.length;
         let ref ants = self.premise.ants;
 
-        let min = ants.into_iter().fold(0, |min, ref ant| {
-            let l = cmp::min(ant.x, &rod.length - ant.x);
-            cmp::max(min, l)
-        });
-        let max = ants.into_iter().fold(0, |max, ref ant| {
-            let l = cmp::max(ant.x, &rod.length - ant.x);
-            cmp::max(max, l)
-        });
+        let min = ants.into_iter()
+                      .map(|ref ant| cmp::min(ant.x, rod_len - ant.x))
+                      .max()
+                      .unwrap();
+        let max = ants.into_iter()
+                      .map(|ref ant| cmp::max(ant.x, rod_len - ant.x))
+                      .max()
+                      .unwrap();
 
         Solution {
             min: min / SPEED_OF_ANT,
