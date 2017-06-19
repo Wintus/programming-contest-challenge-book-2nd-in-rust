@@ -14,6 +14,7 @@ dependencies:
         curl -sSf https://sh.rustup.rs | sh /dev/stdin -y
       fi
     - rustup install stable
+    - rustup default stable
   override:
     - cargo build
 
