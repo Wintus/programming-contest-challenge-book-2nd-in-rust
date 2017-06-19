@@ -28,7 +28,6 @@ struct Ant {
 
 impl Problem {
     fn solve(&self) -> Solution {
-        // alias names
         let rod_len = self.premise.rod.length;
         let ants = &self.premise.ants;
 
