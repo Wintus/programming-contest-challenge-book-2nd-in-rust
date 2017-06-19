@@ -14,10 +14,10 @@ impl Problem {
         let ref sides = self.premise.sides;
 
         // TODO: use permutation
-        let last_index = sides.len() - 1;
-        for i in 0..last_index {
-            for j in (i + 1)..last_index {
-                for k in (j + 1)..last_index {
+        let len = sides.len();
+        for i in 0..len {
+            for j in (i + 1)..len {
+                for k in (j + 1)..len {
                     let sides: [u32; 3] = [
                         *sides.get(i).unwrap(),
                         *sides.get(j).unwrap(),
