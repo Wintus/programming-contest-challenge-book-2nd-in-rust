@@ -13,7 +13,7 @@ impl Problem {
         let mut max_perimeter = 0;
         let ref sides = self.premise.sides;
 
-        // TODO: use permutation
+        // TODO: use combinations
         let len = sides.len();
         for i in 0..len {
             for j in (i + 1)..len {
