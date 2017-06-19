@@ -1,13 +1,20 @@
 machine:
+  environment:
+    CARGO_HOME: $HOME/.cargo
+    PATH: $PATH:$CARGO_HOME/bin
   services:
     - docker
 
 dependencies:
+  cache_directories:
+    - ~/.cargo/bin
   pre:
     - |
-      if [ ! -x cargo ]; then
-        curl -sf -L https://static.rust-lang.org/rustup.sh | sh /dev/stdin --channel=nightly --yes
+      if [ ! -x `which cargo` ]; then
+        curl -sSf https://sh.rustup.rs | sh /dev/stdin -y
       fi
+    - rustup install stable
+    - rustup default stable
   override:
     - cargo build
 
