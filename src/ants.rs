@@ -30,7 +30,7 @@ impl Problem {
     fn solve(&self) -> Solution {
         // alias names
         let rod_len = self.premise.rod.length;
-        let ref ants = self.premise.ants;
+        let ants = &self.premise.ants;
 
         let min = ants.into_iter()
                       .map(|ref ant| cmp::min(ant.x, rod_len - ant.x))
