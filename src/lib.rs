@@ -41,3 +41,7 @@ mod ants;
 
 #[allow(dead_code)]
 mod lottery;
+
+/// 2-1
+#[allow(dead_code)]
+mod partial_sum;
