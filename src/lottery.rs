@@ -25,7 +25,10 @@ impl Problem {
 
         ns.iter()
           .map(|&n| sum as i16 - n)
-          .any(|n| if let Ok(_) = ns.binary_search(&n) { true } else { false })
+          .any(|n| match ns.binary_search(&n) {
+              Ok(_) => true,
+              _ => false
+          })
     }
 }
 
