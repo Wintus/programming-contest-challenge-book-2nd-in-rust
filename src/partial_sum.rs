@@ -8,7 +8,24 @@ struct Premise {
 }
 
 impl Problem {
-    fn solve(&self) -> bool { false }
+    /// Deep First Search
+    fn dfs(&self, i: usize, sum: i32) -> bool {
+        let ref p = self.premise;
+
+        if i == p.ns.len() {
+            sum == p.sum
+        } else if self.dfs(i + 1, sum) {
+            // don't use n
+            true
+        } else if self.dfs(i + 1, sum + *p.ns.get(i).unwrap()) {
+            // use n
+            true
+        } else {
+            false
+        }
+    }
+
+    fn solve(&self) -> bool { self.dfs(0, 0) }
 }
 
 #[test]
