@@ -24,6 +24,7 @@ impl Problem {
                      .map(|&n| n as i16)
                      .collect::<Vec<_>>();
 
+        // TODO: use 直積
         for n0 in ns {
             for n1 in ns {
                 let ns2: Vec<_> = vec![n0, n1];
