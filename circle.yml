@@ -14,7 +14,7 @@ dependencies:
     - rustup install stable
   post:
     # https://github.com/rust-lang/cargo/issues/3900
-    - sed -i 's/github/git-non-exist-hub/g' ~/.gitconfig
+    - sed -i 's/github/git-non-exist-hub/g' $HOME/.gitconfig
 
 compile:
   override:
