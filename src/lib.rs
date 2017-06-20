@@ -1,4 +1,6 @@
 //! Problems
+#[macro_use]
+extern crate itertools;
 
 #[allow(dead_code)]
 mod stub;

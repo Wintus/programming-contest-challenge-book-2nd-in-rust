@@ -1,4 +1,6 @@
-use std::cmp;
+extern crate itertools;
+
+use itertools::Itertools;
 
 struct Problem {
     premise: Premise
@@ -8,32 +10,24 @@ struct Premise {
     sides: Vec<u32>
 }
 
+const N_TRIANGLE_SIDES: u8 = 3;
+
 impl Problem {
-    fn solve(&self) -> u32 {
-        let mut max_perimeter = 0;
+    fn solve(&self) -> Option<u32> {
         let ref sides = self.premise.sides;
+        let combs: itertools::Combinations<_> =
+            sides.into_iter()
+                 .combinations(N_TRIANGLE_SIDES as usize);
 
-        // TODO: use combinations
-        let len = sides.len();
-        for i in 0..len {
-            for j in (i + 1)..len {
-                for k in (j + 1)..len {
-                    let sides: [u32; 3] = [
-                        *sides.get(i).unwrap(),
-                        *sides.get(j).unwrap(),
-                        *sides.get(k).unwrap(),
-                    ];
+        let max_perimeter = combs.filter_map(|ns| {
+            let sides = ns.into_iter();
+            let perimeter = sides.clone().sum::<u32>();
+            let max_side = *sides.clone().max().unwrap();
+            let rest = perimeter - max_side;
 
-                    let perimeter = sides.iter().sum::<u32>();
-                    let max_side = *sides.iter().max().unwrap();
-                    let rest = perimeter - max_side;
+            if max_side < rest { Some(perimeter) } else { None }
+        }).max();
 
-                    if max_side < rest {
-                        max_perimeter = cmp::max(max_perimeter, perimeter);
-                    };
-                }
-            }
-        }
         max_perimeter
     }
 }
@@ -42,12 +36,12 @@ impl Problem {
 fn test_case_0() {
     let premise = Premise { sides: vec![2, 3, 4, 5, 10] };
     let problem = Problem { premise: premise };
-    assert_eq!(12, problem.solve());
+    assert_eq!(12, problem.solve().unwrap_or(0));
 }
 
 #[test]
 fn test_case_1() {
     let premise = Premise { sides: vec![4, 5, 10, 20] };
     let problem = Problem { premise: premise };
-    assert_eq!(0, problem.solve()); // = never
+    assert_eq!(0, problem.solve().unwrap_or(0)); // = never
 }

@@ -9,8 +9,7 @@ struct Premise {
     ants: Vec<Ant>,
 }
 
-#[derive(Debug)]
-#[derive(Eq)]
+#[derive(Debug, Eq)]
 struct Solution {
     min: u32,
     max: u32,
@@ -31,11 +30,11 @@ impl Problem {
         let rod_len = self.premise.rod.length;
         let ants = &self.premise.ants;
 
-        let min = ants.into_iter()
+        let min = ants.iter()
                       .map(|ref ant| cmp::min(ant.x, rod_len - ant.x))
                       .max()
                       .unwrap();
-        let max = ants.into_iter()
+        let max = ants.iter()
                       .map(|ref ant| cmp::max(ant.x, rod_len - ant.x))
                       .max()
                       .unwrap();

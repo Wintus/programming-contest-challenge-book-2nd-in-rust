@@ -1,3 +1,5 @@
+extern crate itertools;
+
 struct Problem {
     premise: Premise
 }
@@ -12,28 +14,23 @@ impl Problem {
         let sum = self.premise.sum as i32;
         let ns = &self.premise.ns;
 
-        // TODO: use combination of 2
-        let ns2 = &mut Vec::new();
-        for n0 in ns {
-            for n1 in ns {
-                ns2.push(n0 + n1);
-            }
-        }
-        ns2.sort(); // for binary search
-        let ns = &ns2.iter()
-                     .map(|&n| n as i16)
-                     .collect::<Vec<_>>();
+        // 2 + 2 = 4
+        let mut ns = iproduct![ns, ns]
+            .map(|(n0, n1)| n0 + n1)
+            .collect::<Vec<_>>();
+        ns.sort(); // for binary search
+        let ns: &Vec<_> = &ns.iter()
+                             .map(|&n| n as i16)
+                             .collect();
 
-        // TODO: use 直積
-        for n0 in ns {
-            for n1 in ns {
-                let ns2: Vec<_> = vec![n0, n1];
-                let sum2 = ns2.into_iter().sum::<i16>() as i32;
-                let n = (sum - sum2) as i16;
-                if let Ok(_) = ns.binary_search(&n) { return true }
-            }
-        }
-        false
+        let winnable =
+            ns.iter()
+              .map(|&n| sum as i16 - n)
+              .any(|n| match ns.binary_search(&n) {
+                  Ok(_) => true,
+                  _ => false
+              });
+        winnable
     }
 }
 
