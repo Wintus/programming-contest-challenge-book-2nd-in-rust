@@ -1,3 +1,5 @@
+use itertools;
+
 struct Problem {
     premise: Premise
 }
@@ -24,16 +26,13 @@ impl Problem {
                      .map(|&n| n as i16)
                      .collect::<Vec<_>>();
 
-        // TODO: use 直積
-        for n0 in ns {
-            for n1 in ns {
-                let ns2: Vec<_> = vec![n0, n1];
-                let sum2 = ns2.into_iter().sum::<i16>() as i32;
-                let n = (sum - sum2) as i16;
-                if let Ok(_) = ns.binary_search(&n) { return true }
-            }
-        }
-        false
+        let mut nss = iproduct![ns, ns];
+        nss.any(|ns| {
+            let ns: Vec<_> = vec![*ns.0, *ns.1];
+            let sum2 = ns.clone().into_iter().sum::<i16>();
+            let n = sum as i16 - sum2;
+            if let Ok(_) = ns.binary_search(&n) { true } else { false }
+        })
     }
 }
 
