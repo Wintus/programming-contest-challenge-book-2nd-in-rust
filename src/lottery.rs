@@ -8,7 +8,23 @@ struct Premise {
 }
 
 impl Problem {
-    fn solve(&self) -> bool { false }
+    fn solve(&self) -> bool {
+        let sum = self.premise.sum;
+        let ns = &self.premise.ns;
+
+        for n0 in ns {
+            for n1 in ns {
+                for n2 in ns {
+                    for n3 in ns {
+                        let ns: Vec<_> = vec![n0, n1, n2, n3];
+                        if ns.into_iter().sum::<u16>() as u32
+                            == sum { return true }
+                    }
+                }
+            }
+        }
+        false
+    }
 }
 
 #[test]
