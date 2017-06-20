@@ -9,8 +9,7 @@ struct Premise {
     ants: Vec<Ant>,
 }
 
-#[derive(Debug)]
-#[derive(Eq)]
+#[derive(Debug, Eq)]
 struct Solution {
     min: u32,
     max: u32,
