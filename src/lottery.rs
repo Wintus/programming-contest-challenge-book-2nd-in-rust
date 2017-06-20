@@ -10,20 +10,26 @@ struct Premise {
 impl Problem {
     fn solve(&self) -> bool {
         let sum = self.premise.sum as i32;
-        let ns = &mut self.premise.ns.clone();
-        ns.sort(); // for binary search
-        let ns = &ns.iter()
-                    .map(|&n| n as i16)
-                    .collect::<Vec<_>>();
+        let ns = &self.premise.ns;
+
+        // TODO: use combination of 2
+        let ns2 = &mut Vec::new();
+        for n0 in ns {
+            for n1 in ns {
+                ns2.push(n0 + n1);
+            }
+        }
+        ns2.sort(); // for binary search
+        let ns = &ns2.iter()
+                     .map(|&n| n as i16)
+                     .collect::<Vec<_>>();
 
         for n0 in ns {
             for n1 in ns {
-                for n2 in ns {
-                    let ns3: Vec<_> = vec![n0, n1, n2];
-                    let sum3 = ns3.into_iter().sum::<i16>() as i32;
-                    let n = (sum - sum3) as i16;
-                    if let Ok(_) = ns.binary_search(&n) { return true }
-                }
+                let ns2: Vec<_> = vec![n0, n1];
+                let sum2 = ns2.into_iter().sum::<i16>() as i32;
+                let n = (sum - sum2) as i16;
+                if let Ok(_) = ns.binary_search(&n) { return true }
             }
         }
         false
