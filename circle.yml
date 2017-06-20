@@ -12,7 +12,6 @@ dependencies:
       hash cargo 2>/dev/null ||
       curl -sSf https://sh.rustup.rs | sh /dev/stdin -y
     - rustup install stable
-  post:
     # https://github.com/rust-lang/cargo/issues/3900
     - sed -i 's/github/git-non-exist-hub/g' $HOME/.gitconfig
 
