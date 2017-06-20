@@ -23,12 +23,14 @@ impl Problem {
                              .map(|&n| n as i16)
                              .collect();
 
-        ns.iter()
-          .map(|&n| sum as i16 - n)
-          .any(|n| match ns.binary_search(&n) {
-              Ok(_) => true,
-              _ => false
-          })
+        let winnable =
+            ns.iter()
+              .map(|&n| sum as i16 - n)
+              .any(|n| match ns.binary_search(&n) {
+                  Ok(_) => true,
+                  _ => false
+              });
+        winnable
     }
 }
 
