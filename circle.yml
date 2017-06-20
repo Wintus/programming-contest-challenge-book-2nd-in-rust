@@ -5,7 +5,8 @@ machine:
 
 dependencies:
   cache_directories:
-    - ~/.cargo/bin
+    - ~/.cargo
+    - ~/.rustup
   pre:
     - >- # install rust unless `cargo` exists
       hash cargo 2>/dev/null ||
