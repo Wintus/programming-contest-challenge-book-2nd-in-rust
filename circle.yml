@@ -2,17 +2,15 @@ machine:
   environment:
     CARGO_HOME: $HOME/.cargo
     PATH: $PATH:$CARGO_HOME/bin
-  services:
-    - docker
 
 dependencies:
   cache_directories:
-    - ~/.cargo/bin
+    - ~/.cargo
+    - ~/.rustup
   pre:
-    - |
-      if [ ! -x `which cargo` ]; then
-        curl -sSf https://sh.rustup.rs | sh /dev/stdin -y
-      fi
+    - >- # install rust unless `cargo` exists
+      hash cargo 2>/dev/null ||
+      curl -sSf https://sh.rustup.rs | sh /dev/stdin -y
     - rustup install stable
     - rustup default stable
   override:
