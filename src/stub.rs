@@ -1,5 +1,3 @@
-use std::cmp;
-
 struct Problem {
     premise: Premise
 }
@@ -8,13 +6,6 @@ struct Premise {}
 
 #[derive(Debug, PartialEq)]
 struct Solution {}
-
-impl cmp::PartialEq for Solution {
-    fn eq(&self, other: &Solution) -> bool {
-        let _other = other;
-        true
-    }
-}
 
 impl Problem {
     fn solve(&self) -> Solution {
