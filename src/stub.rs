@@ -6,7 +6,7 @@ struct Problem {
 
 struct Premise {}
 
-#[derive(Debug, Eq)]
+#[derive(Debug, PartialEq)]
 struct Solution {}
 
 impl cmp::PartialEq for Solution {
