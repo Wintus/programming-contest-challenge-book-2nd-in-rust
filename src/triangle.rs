@@ -1,6 +1,4 @@
-extern crate itertools;
-
-use itertools::Itertools;
+use itertools::{Combinations, Itertools};
 
 struct Problem {
     premise: Premise
@@ -15,7 +13,7 @@ const N_TRIANGLE_SIDES: u8 = 3;
 impl Problem {
     fn solve(&self) -> Option<u32> {
         let ref sides = self.premise.sides;
-        let combs: itertools::Combinations<_> =
+        let combs: Combinations<_> =
             sides.into_iter()
                  .combinations(N_TRIANGLE_SIDES as usize);
 
