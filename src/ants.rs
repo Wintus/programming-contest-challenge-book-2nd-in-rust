@@ -9,7 +9,7 @@ struct Premise {
     ants: Vec<Ant>,
 }
 
-#[derive(Debug, Eq)]
+#[derive(Debug, PartialEq)]
 struct Solution {
     min: u32,
     max: u32,
@@ -43,12 +43,6 @@ impl Problem {
             min: min / SPEED_OF_ANT,
             max: max / SPEED_OF_ANT,
         }
-    }
-}
-
-impl cmp::PartialEq for Solution {
-    fn eq(&self, other: &Solution) -> bool {
-        self.min == other.min && self.max == other.max
     }
 }
 
