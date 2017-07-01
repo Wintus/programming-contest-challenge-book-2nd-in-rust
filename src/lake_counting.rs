@@ -1,19 +1,18 @@
 use {Solvable, UnsolvableError};
 
 struct Problem {
-    premise: Premise,
-    mem: Vec<Vec<bool>>,
+    solved: bool,
+    yard: Yard<bool>,
+    footprints: Yard<bool>,
 }
 
-struct Premise {
-    yard: Vec<Vec<bool>>
-}
+type Yard<T> = Vec<Vec<T>>;
 
 impl Solvable for Problem {
-    type I = Premise;
+    type I = Yard<bool>;
     type O = u32;
 
-    fn input(&self) -> &Premise { &self.premise }
+    fn input(&self) -> &Self::I { &self.yard }
     fn solve(&self) -> Result<u32, UnsolvableError> { Ok(3) }
 }
 
@@ -45,12 +44,12 @@ fn test_case_0() {
             .collect();
     let rows = yard.len();
     let cols = yard.first().unwrap().len();
-    let mem = vec![vec![false; cols]; rows];
+    let plain = vec![vec![false; cols]; rows];
 
-    let premise = Premise { yard: yard };
     let problem = Problem {
-        premise: premise,
-        mem: mem,
+        solved: false,
+        yard: yard,
+        footprints: plain,
     };
     assert_eq!(3, problem.solve().unwrap_or(0));
 }
