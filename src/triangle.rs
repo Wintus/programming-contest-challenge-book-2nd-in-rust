@@ -1,8 +1,8 @@
+use {Solvable, UnsolvableError};
+
 use itertools::{Combinations, Itertools};
 
-struct Problem {
-    premise: Premise
-}
+struct Problem {}
 
 struct Premise {
     sides: Vec<u32>
@@ -10,9 +10,12 @@ struct Premise {
 
 const N_TRIANGLE_SIDES: u8 = 3;
 
-impl Problem {
-    fn solve(&self) -> Option<u32> {
-        let ref sides = self.premise.sides;
+impl Solvable for Problem {
+    type I = Premise;
+    type O = u32;
+
+    fn solve(&self, premise: &Premise) -> Result<u32, UnsolvableError> {
+        let ref sides = premise.sides;
         let combs: Combinations<_> =
             sides.into_iter()
                  .combinations(N_TRIANGLE_SIDES as usize);
@@ -26,20 +29,21 @@ impl Problem {
             if max_side < rest { Some(perimeter) } else { None }
         }).max();
 
-        max_perimeter
+        match max_perimeter {
+            Some(n) => Ok(n),
+            None => Err(UnsolvableError::NoSolution),
+        }
     }
 }
 
 #[test]
 fn test_case_0() {
     let premise = Premise { sides: vec![2, 3, 4, 5, 10] };
-    let problem = Problem { premise: premise };
-    assert_eq!(12, problem.solve().unwrap_or(0));
+    assert_eq!(12, Problem {}.solve(&premise).unwrap_or(0));
 }
 
 #[test]
 fn test_case_1() {
     let premise = Premise { sides: vec![4, 5, 10, 20] };
-    let problem = Problem { premise: premise };
-    assert_eq!(0, problem.solve().unwrap_or(0)); // = never
+    assert_eq!(0, Problem {}.solve(&premise).unwrap_or(0)); // = no solution
 }
