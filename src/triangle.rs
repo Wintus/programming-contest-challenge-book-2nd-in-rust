@@ -2,7 +2,9 @@ use {Solvable, UnsolvableError};
 
 use itertools::{Combinations, Itertools};
 
-struct Problem {}
+struct Problem {
+    premise: Premise
+}
 
 struct Premise {
     sides: Vec<u32>
@@ -14,8 +16,10 @@ impl Solvable for Problem {
     type I = Premise;
     type O = u32;
 
-    fn solve(&self, premise: &Premise) -> Result<u32, UnsolvableError> {
-        let ref sides = premise.sides;
+    fn input(&self) -> &Premise { &self.premise }
+
+    fn solve(&self) -> Result<u32, UnsolvableError> {
+        let sides = &self.input().sides;
         let combs: Combinations<_> =
             sides.into_iter()
                  .combinations(N_TRIANGLE_SIDES as usize);
@@ -39,11 +43,13 @@ impl Solvable for Problem {
 #[test]
 fn test_case_0() {
     let premise = Premise { sides: vec![2, 3, 4, 5, 10] };
-    assert_eq!(12, Problem {}.solve(&premise).unwrap_or(0));
+    let problem = Problem { premise: premise };
+    assert_eq!(12, problem.solve().unwrap_or(0));
 }
 
 #[test]
 fn test_case_1() {
     let premise = Premise { sides: vec![4, 5, 10, 20] };
-    assert_eq!(0, Problem {}.solve(&premise).unwrap_or(0)); // = no solution
+    let problem = Problem { premise: premise };
+    assert_eq!(0, problem.solve().unwrap_or(0)); // = no solution
 }

@@ -1,6 +1,8 @@
 use {Solvable, UnsolvableError};
 
-struct Problem {}
+struct Problem {
+    premise: Premise
+}
 
 struct Premise {
     sum: u32,
@@ -11,9 +13,12 @@ impl Solvable for Problem {
     type I = Premise;
     type O = bool;
 
-    fn solve(&self, premise: &Premise) -> Result<bool, UnsolvableError> {
-        let sum = premise.sum as i32;
-        let ns = &premise.ns;
+    fn input(&self) -> &Premise { &self.premise }
+
+    fn solve(&self) -> Result<bool, UnsolvableError> {
+        let input = self.input();
+        let sum = input.sum as i32;
+        let ns = &input.ns;
 
         // 2 + 2 = 4
         let mut ns: Vec<_> =
@@ -48,7 +53,8 @@ fn test_case_0() {
         sum: 10,
         ns: vec![1, 3, 5]
     };
-    assert!(Problem {}.solve(&premise).unwrap_or(false));
+    let problem = Problem { premise: premise };
+    assert!(problem.solve().unwrap_or(false));
 }
 
 #[test]
@@ -57,5 +63,6 @@ fn test_case_1() {
         sum: 9,
         ns: vec![1, 3, 5]
     };
-    assert!(!Problem {}.solve(&premise).unwrap_or(false));
+    let problem = Problem { premise: premise };
+    assert!(!problem.solve().unwrap_or(false));
 }
