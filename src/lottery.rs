@@ -1,5 +1,3 @@
-extern crate itertools;
-
 struct Problem {
     premise: Premise
 }
