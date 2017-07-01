@@ -15,7 +15,9 @@ trait Solvable {
 
 /// Error when a problem is unsolvable
 #[derive(Debug)]
-enum UnsolvableError {}
+enum UnsolvableError {
+    NoSolution
+}
 
 impl fmt::Display for UnsolvableError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
