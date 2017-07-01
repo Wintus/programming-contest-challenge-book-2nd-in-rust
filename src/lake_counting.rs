@@ -6,6 +6,24 @@ struct Problem {
     footprints: Yard<bool>,
 }
 
+/// 8方向のvectorを生成
+fn mkdirs2d() -> [(i8, i8); 8] {
+    let dir1d: Vec<i8> = vec![-1, 0, 1];
+    let dir2d: Vec<_> =
+        iproduct![dir1d.clone(), dir1d.clone()]
+            .filter(|&(dx, dy)| match (dx, dy) {
+                (0, 0) => false,
+                _ => true
+            })
+            .collect();
+    let mut d8 = [(0, 0); 8];
+    d8.clone_from_slice(&dir2d.as_slice());
+    d8
+}
+
+// FIXME: nightly
+//const DIRECTIONS: [(i8, i8); 8] = mkdirs2d();
+
 type Yard<T> = Vec<Vec<T>>;
 
 impl Solvable for Problem {
