@@ -2,7 +2,9 @@ use {Solvable, UnsolvableError};
 
 use std::cmp;
 
-struct Problem {}
+struct Problem {
+    premise: Premise
+}
 
 struct Premise {
     rod: Rod,
@@ -29,9 +31,12 @@ impl Solvable for Problem {
     type I = Premise;
     type O = MinMaxTime;
 
-    fn solve(&self, premise: &Premise) -> Result<MinMaxTime, UnsolvableError> {
-        let rod_len = premise.rod.length;
-        let ants = &premise.ants;
+    fn input(&self) -> &Premise { &self.premise }
+
+    fn solve(&self) -> Result<MinMaxTime, UnsolvableError> {
+        let input = self.input();
+        let rod_len = input.rod.length;
+        let ants = &input.ants;
 
         let min = ants.iter()
                       .map(|ref ant| cmp::min(ant.x, rod_len - ant.x))
@@ -65,5 +70,6 @@ fn test_case_0() {
         // [1, 1, 1]
         max: 8,
     };
-    assert_eq!(solution, Problem {}.solve(&premise).unwrap());
+    let problem = Problem { premise: premise };
+    assert_eq!(solution, problem.solve().unwrap());
 }
