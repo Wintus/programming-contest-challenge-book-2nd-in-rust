@@ -30,7 +30,7 @@ impl error::Error for UnsolvableError {
 }
 
 #[allow(dead_code)]
-mod stub;
+mod _stub;
 
 #[allow(dead_code)]
 mod triangle;
