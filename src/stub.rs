@@ -1,22 +1,25 @@
-struct Problem {
-    premise: Premise
-}
+use {Solvable, UnsolvableError};
+
+struct Problem {}
 
 struct Premise {}
 
 #[derive(Debug, PartialEq)]
 struct Solution {}
 
-impl Problem {
-    fn solve(&self) -> Solution {
-        Solution {}
+impl Solvable for Problem {
+    type I = Premise;
+    type O = Solution;
+
+    fn solve(&self, _: &Premise) -> Result<Solution, UnsolvableError> {
+        Ok(Solution {})
     }
 }
 
 #[test]
 fn test_case_0() {
+    let problem = Problem {};
     let premise = Premise {};
     let solution = Solution {};
-    let problem = Problem { premise: premise };
-    assert_eq!(solution, problem.solve());
+    assert_eq!(solution, problem.solve(&premise).unwrap());
 }
