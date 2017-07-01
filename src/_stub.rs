@@ -1,6 +1,8 @@
 use {Solvable, UnsolvableError};
 
-struct Problem {}
+struct Problem {
+    premise: Premise
+}
 
 struct Premise {}
 
@@ -11,15 +13,18 @@ impl Solvable for Problem {
     type I = Premise;
     type O = Solution;
 
-    fn solve(&self, _: &Premise) -> Result<Solution, UnsolvableError> {
+    fn input(&self) -> &Premise {
+        &self.premise
+    }
+    fn solve(&self) -> Result<Solution, UnsolvableError> {
         Ok(Solution {})
     }
 }
 
 #[test]
 fn test_case_0() {
-    let problem = Problem {};
     let premise = Premise {};
     let solution = Solution {};
-    assert_eq!(solution, problem.solve(&premise).unwrap());
+    let problem = Problem { premise: premise };
+    assert_eq!(solution, problem.solve().unwrap());
 }
