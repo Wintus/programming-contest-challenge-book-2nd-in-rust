@@ -1,25 +1,31 @@
-struct Problem {
-    premise: Premise
-}
+use {Solvable, UnsolvableError};
+
+struct Problem {}
 
 struct Premise {
     sum: u32,
     ns: Vec<u16>
 }
 
-impl Problem {
-    fn solve(&self) -> bool {
-        let sum = self.premise.sum as i32;
-        let ns = &self.premise.ns;
+impl Solvable for Problem {
+    type I = Premise;
+    type O = bool;
+
+    fn solve(&self, premise: &Premise) -> Result<bool, UnsolvableError> {
+        let sum = premise.sum as i32;
+        let ns = &premise.ns;
 
         // 2 + 2 = 4
-        let mut ns = iproduct![ns, ns]
-            .map(|(n0, n1)| n0 + n1)
-            .collect::<Vec<_>>();
+        let mut ns: Vec<_> =
+            iproduct![ns, ns]
+                .map(|(n0, n1)| n0 + n1)
+                .collect();
         ns.sort(); // for binary search
-        let ns: &Vec<_> = &ns.iter()
-                             .map(|&n| n as i16)
-                             .collect();
+        // make immutable
+        let ns: &Vec<_> =
+            &ns.iter()
+               .map(|&n| n as i16)
+               .collect();
 
         let winnable =
             ns.iter()
@@ -28,7 +34,11 @@ impl Problem {
                   Ok(_) => true,
                   _ => false
               });
-        winnable
+        if winnable {
+            Ok(winnable)
+        } else {
+            Err(UnsolvableError::NoSolution)
+        }
     }
 }
 
@@ -38,8 +48,7 @@ fn test_case_0() {
         sum: 10,
         ns: vec![1, 3, 5]
     };
-    let problem = Problem { premise: premise };
-    assert!(problem.solve());
+    assert!(Problem {}.solve(&premise).unwrap_or(false));
 }
 
 #[test]
@@ -48,6 +57,5 @@ fn test_case_1() {
         sum: 9,
         ns: vec![1, 3, 5]
     };
-    let problem = Problem { premise: premise };
-    assert!(!problem.solve());
+    assert!(!Problem {}.solve(&premise).unwrap_or(false));
 }
