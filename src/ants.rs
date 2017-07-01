@@ -1,8 +1,8 @@
+use {Solvable, UnsolvableError};
+
 use std::cmp;
 
-struct Problem {
-    premise: Premise
-}
+struct Problem {}
 
 struct Premise {
     rod: Rod,
@@ -10,7 +10,7 @@ struct Premise {
 }
 
 #[derive(Debug, PartialEq)]
-struct Solution {
+struct MinMaxTime {
     min: u32,
     max: u32,
 }
@@ -25,10 +25,13 @@ struct Ant {
     x: u32
 }
 
-impl Problem {
-    fn solve(&self) -> Solution {
-        let rod_len = self.premise.rod.length;
-        let ants = &self.premise.ants;
+impl Solvable for Problem {
+    type I = Premise;
+    type O = MinMaxTime;
+
+    fn solve(&self, premise: &Premise) -> Result<MinMaxTime, UnsolvableError> {
+        let rod_len = premise.rod.length;
+        let ants = &premise.ants;
 
         let min = ants.iter()
                       .map(|ref ant| cmp::min(ant.x, rod_len - ant.x))
@@ -39,10 +42,10 @@ impl Problem {
                       .max()
                       .unwrap();
 
-        Solution {
+        Ok(MinMaxTime {
             min: min / SPEED_OF_ANT,
             max: max / SPEED_OF_ANT,
-        }
+        })
     }
 }
 
@@ -56,12 +59,11 @@ fn test_case_0() {
             Ant { x: 7 },
         ]
     };
-    let solution = Solution {
+    let solution = MinMaxTime {
         // [-1, 1, 1]
         min: 4,
         // [1, 1, 1]
         max: 8,
     };
-    let problem = Problem { premise: premise };
-    assert_eq!(solution, problem.solve());
+    assert_eq!(solution, Problem {}.solve(&premise).unwrap());
 }
