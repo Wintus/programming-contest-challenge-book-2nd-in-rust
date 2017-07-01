@@ -10,7 +10,8 @@ trait Solvable {
     type I; // Input, Premise
     type O; // Output, Solution
 
-    fn solve(&self, _: &Self::I) -> Result<Self::O, UnsolvableError>;
+    fn input(&self) -> &Self::I;
+    fn solve(&self) -> Result<Self::O, UnsolvableError>;
 }
 
 /// Error when a problem is unsolvable
