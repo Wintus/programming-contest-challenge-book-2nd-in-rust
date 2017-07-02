@@ -7,16 +7,19 @@ struct Problem {
 // &[&[T]] は lifetime 管理が面倒
 type Yard<T> = Vec<Vec<T>>;
 
+type Dir1D = [i8; 3];
+type Dir2D = [(i8, i8); 9];
+
 /// １次元の移動vector
 /// 0 = 不動含む
-fn mkdirs1d() -> [i8; 3] { [-1, 0, 1] }
+fn mkdirs1d() -> Dir1D { [-1, 0, 1] }
 
 /// 8方向のvectorを生成
 /// (0, 0) = 不動含む
-fn mkdirs2d() -> [(i8, i8); 9] {
+fn mkdirs2d() -> Dir2D {
     let dir1d = mkdirs1d();
     let dir2d: Vec<_> = iproduct![dir1d.to_vec(), dir1d.to_vec()].collect();
-    let mut d9 = [(0, 0); 9];
+    let mut d9: Dir2D = Default::default();
     d9.copy_from_slice(&dir2d.as_slice());
     d9
 }
@@ -117,8 +120,7 @@ fn test_case_0() {
         _W_W_____WW_
         W_W_W_____W_
         _W_W______W_
-        __W_______W_
-    "
+        __W_______W_"
         .split_whitespace()
         .map(|s| s.chars()
                   .map(|c| c == 'W')
