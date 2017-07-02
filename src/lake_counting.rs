@@ -6,19 +6,18 @@ struct Problem {
     footprints: Yard<bool>,
 }
 
+/// １次元の移動vector
+/// 0 = 不動含む
+fn mkdirs1d() -> [i8; 3] { [-1, 0, 1] }
+
 /// 8方向のvectorを生成
-fn mkdirs2d() -> [(i8, i8); 8] {
-    let dir1d: Vec<i8> = vec![-1, 0, 1];
-    let dir2d: Vec<_> =
-        iproduct![dir1d.clone(), dir1d.clone()]
-            .filter(|&(dx, dy)| match (dx, dy) {
-                (0, 0) => false,
-                _ => true
-            })
-            .collect();
-    let mut d8 = [(0, 0); 8];
-    d8.clone_from_slice(&dir2d.as_slice());
-    d8
+/// (0, 0) = 不動含む
+fn mkdirs2d() -> [(i8, i8); 9] {
+    let dir1d = mkdirs1d();
+    let dir2d: Vec<_> = iproduct![dir1d.to_vec(), dir1d.to_vec()].collect();
+    let mut d9 = [(0, 0); 9];
+    d9.clone_from_slice(&dir2d.as_slice());
+    d9
 }
 
 // FIXME: nightly
