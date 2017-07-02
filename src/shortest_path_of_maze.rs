@@ -143,3 +143,37 @@ fn test_case_0() {
     };
     assert_eq!(22, problem.solve().unwrap());
 }
+
+#[test]
+fn test_case_1() {
+    let maze: Maze = "\
+        S#######.#
+        ......#..#
+        .#.##.##.#
+        .#........
+        ##.##.####
+        ....#....#
+        .#######.#
+        ....#.....
+        .####.###.
+        ...G#....#"
+        .split_whitespace()
+        .map(|s: &str| {
+            s.chars()
+             .map(|c| match c {
+                 '#' => MazePart::Wall,
+                 '.' => MazePart::Path,
+                 'S' => MazePart::Start,
+                 'G' => MazePart::Goal,
+                 _ => MazePart::Path,
+             })
+             .collect()
+        })
+        .collect();
+    let problem = Problem {
+        maze: maze,
+        start: (0, 0),
+        goal: (9, 3),
+    };
+    assert_eq!(16, problem.solve().unwrap());
+}
