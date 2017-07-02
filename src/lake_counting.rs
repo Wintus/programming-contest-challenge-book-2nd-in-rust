@@ -1,9 +1,7 @@
 use {Solvable, UnsolvableError};
 
 struct Problem {
-    solved: bool,
-    yard: Yard<bool>,
-    footprints: Yard<bool>,
+    yard: Yard<bool>
 }
 
 // &[&[T]] は lifetime 管理が面倒
@@ -31,17 +29,41 @@ impl Solvable for Problem {
     type O = u32;
 
     fn input(&self) -> &Self::I { &self.yard }
-    fn solve(&self) -> Result<u32, UnsolvableError> { Ok(3) }
+    fn solve(&self) -> Result<u32, UnsolvableError> {
+        let mut footprints = self.footprint();
+
+        let mut lake_count = 0;
+        for x in 0..self.yard.len() {
+            if let Some(row) = self.yard.get(x) {
+                for y in 0..row.len() {
+                    if let Some(col) = row.get(y) {
+                        let is_lake = *col;
+                        let visited = *footprints
+                            .get(x).unwrap()
+                            .get(y).unwrap();
+                        // println!("({}, {}): lake={}, visited={}", x, y, is_lake, visited);
+                        if is_lake && !visited {
+                            self.dfs(&mut footprints, x, y);
+                            lake_count += 1;
+                        }
+                        // println!("{:?}", lake_count);
+                    }
+                }
+            }
+        }
+        Ok(lake_count)
+    }
 }
 
 impl Problem {
     /// Return: point (x, y) is lake or not.
-    /// (x, y) = (row, column)
-    fn dfs(&mut self, x: usize, y: usize) -> bool {
+    /// (x, y) = (row, column).
+    /// 状態 (= `footprints`) を引き回しながら探索。
+    fn dfs(&self, footprints: &mut Yard<bool>, x: usize, y: usize) -> bool {
         // 現在地 (x, y) を訪問済みにする
         let mut visited = false;
         {
-            if let Some(row) = self.footprints.get_mut(x) {
+            if let Some(row) = footprints.get_mut(x) {
                 let row: &mut Vec<_> = row; // type hinting
                 if let Some(col) = row.get_mut(y) {
                     if *col { visited = true; }
@@ -69,11 +91,21 @@ impl Problem {
                                   .unwrap_or(&false)
                          })
                          .unwrap_or(false);
-            // &mut の又貸し
-            if is_lake { self.dfs(nx, ny); }
+            // &mut footprints (状態) の又貸し
+            if is_lake { self.dfs(footprints, nx, ny); }
         }
         // not visited
         false
+    }
+
+    /// メモ用の 2d vec 生成。
+    /// yard と同サイズ。
+    fn footprint(&self) -> Yard<bool> {
+        let yard = &self.yard;
+        let rows = yard.len();
+        let cols = yard.first().unwrap().len();
+
+        vec![vec![false; cols]; rows]
     }
 }
 
@@ -90,21 +122,13 @@ fn test_case_0() {
         W_W_W_____W_
         _W_W______W_
         __W_______W_
-    ";
-    let yard: Vec<Vec<bool>> =
-        yard.split_whitespace()
-            .map(|s| s.chars()
-                      .map(|c| c == 'W')
-                      .collect())
-            .collect();
-    let rows = yard.len();
-    let cols = yard.first().unwrap().len();
-    let plain = vec![vec![false; cols]; rows];
+    "
+        .split_whitespace()
+        .map(|s| s.chars()
+                  .map(|c| c == 'W')
+                  .collect())
+        .collect();
 
-    let problem = Problem {
-        solved: false,
-        yard: yard,
-        footprints: plain,
-    };
+    let problem = Problem { yard: yard };
     assert_eq!(3, problem.solve().unwrap_or(0));
 }
