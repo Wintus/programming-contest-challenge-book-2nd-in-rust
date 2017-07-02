@@ -6,6 +6,9 @@ struct Problem {
     footprints: Yard<bool>,
 }
 
+// &[&[T]] は lifetime 管理が面倒
+type Yard<T> = Vec<Vec<T>>;
+
 /// １次元の移動vector
 /// 0 = 不動含む
 fn mkdirs1d() -> [i8; 3] { [-1, 0, 1] }
@@ -22,8 +25,6 @@ fn mkdirs2d() -> [(i8, i8); 9] {
 
 // FIXME: nightly
 //const DIRECTIONS: [(i8, i8); 8] = mkdirs2d();
-
-type Yard<T> = Vec<Vec<T>>;
 
 impl Solvable for Problem {
     type I = Yard<bool>;
