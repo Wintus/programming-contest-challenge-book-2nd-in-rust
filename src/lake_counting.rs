@@ -19,7 +19,7 @@ fn mkdirs2d() -> [(i8, i8); 9] {
     let dir1d = mkdirs1d();
     let dir2d: Vec<_> = iproduct![dir1d.to_vec(), dir1d.to_vec()].collect();
     let mut d9 = [(0, 0); 9];
-    d9.clone_from_slice(&dir2d.as_slice());
+    d9.copy_from_slice(&dir2d.as_slice());
     d9
 }
 
