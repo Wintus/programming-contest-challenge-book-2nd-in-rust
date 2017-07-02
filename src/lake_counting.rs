@@ -64,8 +64,11 @@ impl Problem {
         if let Some(row) = footprints.get_mut(x) {
             let row: &mut Vec<_> = row; // type hinting
             if let Some(col) = row.get_mut(y) {
-                if *col { return; }
-                *col = true;
+                if *col {
+                    return;
+                } else {
+                    *col = true;
+                }
             }
         }
 
