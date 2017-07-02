@@ -42,7 +42,7 @@ impl Solvable for Problem {
                             .get(x).unwrap()
                             .get(y).unwrap();
                         if is_lake && !visited {
-                            self.dfs(&mut footprints, x, y);
+                            self.dfs(&mut footprints, x, y); // 水たまりを踏破
                             lake_count += 1;
                         }
                     }
