@@ -41,12 +41,10 @@ impl Solvable for Problem {
                         let visited = *footprints
                             .get(x).unwrap()
                             .get(y).unwrap();
-                        // println!("({}, {}): lake={}, visited={}", x, y, is_lake, visited);
                         if is_lake && !visited {
                             self.dfs(&mut footprints, x, y);
                             lake_count += 1;
                         }
-                        // println!("{:?}", lake_count);
                     }
                 }
             }
