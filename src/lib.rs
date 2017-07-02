@@ -4,6 +4,10 @@ extern crate itertools;
 
 use std::error;
 use std::fmt;
+use std::result;
+
+#[allow(dead_code)]
+type Result<T> = result::Result<T, UnsolvableError>;
 
 /// Solve problems with inputs & outputs
 trait Solvable {
@@ -11,7 +15,7 @@ trait Solvable {
     type O; // Output, Solution
 
     fn input(&self) -> &Self::I;
-    fn solve(&self) -> Result<Self::O, UnsolvableError>;
+    fn solve(&self) -> Result<Self::O>;
 }
 
 /// Error when a problem is unsolvable
@@ -45,4 +49,5 @@ mod lottery;
 /// 2-1
 mod partial_sum;
 mod lake_counting;
+#[allow(dead_code)]
 mod shortest_path_of_maze;
