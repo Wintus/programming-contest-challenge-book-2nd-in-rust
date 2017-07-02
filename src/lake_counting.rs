@@ -57,7 +57,7 @@ impl Problem {
     /// Return: point (x, y) is lake or not.
     /// (x, y) = (row, column).
     /// 状態 (= `footprints`) を引き回しながら探索。
-    fn dfs(&self, footprints: &mut Yard<bool>, x: usize, y: usize) -> bool {
+    fn dfs(&self, footprints: &mut Yard<bool>, x: usize, y: usize) {
         // 現在地 (x, y) を訪問済みにする
         let mut visited = false;
         {
@@ -69,7 +69,7 @@ impl Problem {
                 }
             }
         }
-        if visited { return true }
+        if visited { return; }
 
         // 8方に訪問
         let _dirs = mkdirs2d();
@@ -92,8 +92,6 @@ impl Problem {
             // &mut footprints (状態) の又貸し
             if is_lake { self.dfs(footprints, nx, ny); }
         }
-        // not visited
-        false
     }
 
     /// メモ用の 2d vec 生成。
