@@ -110,19 +110,8 @@ fn get_mut_at<T>(grid: &mut Grid2D<T>, point: Point) -> &mut T {
         .get_mut(point.1).unwrap()
 }
 
-#[test]
-fn test_case_0() {
-    let maze: Maze = "\
-        #S######.#
-        ......#..#
-        .#.##.##.#
-        .#........
-        ##.##.####
-        ....#....#
-        .#######.#
-        ....#.....
-        .####.###.
-        ....#...G#"
+fn mk_maze(maze_str: &str) -> Grid2D<MazePart> {
+    maze_str
         .split_whitespace()
         .map(|s: &str| {
             s.chars()
@@ -135,7 +124,23 @@ fn test_case_0() {
              })
              .collect()
         })
-        .collect();
+        .collect()
+}
+
+#[test]
+fn test_case_0() {
+    let maze = "\
+        #S######.#
+        ......#..#
+        .#.##.##.#
+        .#........
+        ##.##.####
+        ....#....#
+        .#######.#
+        ....#.....
+        .####.###.
+        ....#...G#";
+    let maze: Maze = mk_maze(maze);
     let problem = Problem {
         maze: maze,
         start: (0, 1),
@@ -146,7 +151,7 @@ fn test_case_0() {
 
 #[test]
 fn test_case_1() {
-    let maze: Maze = "\
+    let maze = "\
         S#######.#
         ......#..#
         .#.##.##.#
@@ -156,20 +161,8 @@ fn test_case_1() {
         .#######.#
         ....#.....
         .####.###.
-        ...G#....#"
-        .split_whitespace()
-        .map(|s: &str| {
-            s.chars()
-             .map(|c| match c {
-                 '#' => MazePart::Wall,
-                 '.' => MazePart::Path,
-                 'S' => MazePart::Start,
-                 'G' => MazePart::Goal,
-                 _ => MazePart::Path,
-             })
-             .collect()
-        })
-        .collect();
+        ...G#....#";
+    let maze: Maze = mk_maze(maze);
     let problem = Problem {
         maze: maze,
         start: (0, 0),
