@@ -57,22 +57,17 @@ impl Solvable for Problem {
 }
 
 impl Problem {
-    /// Return: point (x, y) is lake or not.
     /// (x, y) = (row, column).
     /// 状態 (= `footprints`) を引き回しながら探索。
     fn dfs(&self, footprints: &mut Yard<bool>, x: usize, y: usize) {
         // 現在地 (x, y) を訪問済みにする
-        let mut visited = false;
-        {
-            if let Some(row) = footprints.get_mut(x) {
-                let row: &mut Vec<_> = row; // type hinting
-                if let Some(col) = row.get_mut(y) {
-                    if *col { visited = true; }
-                    *col = true;
-                }
+        if let Some(row) = footprints.get_mut(x) {
+            let row: &mut Vec<_> = row; // type hinting
+            if let Some(col) = row.get_mut(y) {
+                if *col { return; }
+                *col = true;
             }
         }
-        if visited { return; }
 
         // 8方に訪問
         let _dirs = mkdirs2d();
