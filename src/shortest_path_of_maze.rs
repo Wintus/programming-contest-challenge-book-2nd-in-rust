@@ -3,7 +3,7 @@ use std::collections;
 use std::u32;
 
 const DIRS: [(i8, i8); 4] = [(1, 0), (0, 1), (-1, 0), (0, -1)];
-const MAX: u32 = u32::MAX >> 2;
+const MAX: u32 = u32::MAX >> 2; // avoid overflow
 
 type Grid2D<T> = Vec<Vec<T>>;
 type Maze = Grid2D<MazePart>;
