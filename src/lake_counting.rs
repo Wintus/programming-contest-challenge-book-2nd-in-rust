@@ -34,8 +34,45 @@ impl Solvable for Problem {
 }
 
 impl Problem {
-    fn dfs(&self, x: u32, y: u32) -> u32 {
-        0
+    /// Return: point (x, y) is lake or not.
+    /// (x, y) = (row, column)
+    fn dfs(&mut self, x: usize, y: usize) -> bool {
+        // 現在地 (x, y) を訪問済みにする
+        let mut visited = false;
+        {
+            if let Some(row) = self.footprints.get_mut(x) {
+                let row: &mut Vec<_> = row; // type hinting
+                if let Some(col) = row.get_mut(y) {
+                    if *col { visited = true; }
+                    *col = true;
+                }
+            }
+        }
+        if visited { return true }
+
+        // 8方に訪問
+        let _dirs = mkdirs2d();
+        let dirs = _dirs
+            .into_iter()
+            .map(|&(x, y)| (x as isize, y as isize));
+        // step all lakes
+        for (dx, dy) in dirs {
+            // get next (x, y)
+            let (nx, ny) = (x as isize + dx, y as isize + dy);
+            let (nx, ny) = (nx as usize, ny as usize);
+
+            let is_lake =
+                self.yard.get(nx)
+                         .map(|ref _row: &Vec<_>| {
+                             *_row.get(ny)
+                                  .unwrap_or(&false)
+                         })
+                         .unwrap_or(false);
+            // &mut の又貸し
+            if is_lake { self.dfs(nx, ny); }
+        }
+        // not visited
+        false
     }
 }
 
