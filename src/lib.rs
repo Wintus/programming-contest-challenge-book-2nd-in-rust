@@ -45,3 +45,4 @@ mod lottery;
 /// 2-1
 mod partial_sum;
 mod lake_counting;
+mod shortest_path_of_maze;
