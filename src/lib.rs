@@ -30,22 +30,18 @@ impl error::Error for UnsolvableError {
     fn description(&self) -> &str { "Cannot solve" }
 }
 
+/// template
 #[allow(dead_code)]
 mod _stub;
 
+/// 1
 #[allow(dead_code)]
 mod triangle;
-
 #[allow(dead_code)]
 mod ants;
-
 #[allow(dead_code)]
 mod lottery;
 
 /// 2-1
-#[allow(dead_code)]
 mod partial_sum;
-
-/// 2-1
-#[allow(dead_code)]
 mod lake_counting;
