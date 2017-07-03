@@ -22,16 +22,12 @@ impl Solvable for Problem {
     fn solve(&self) -> Result<Self::O> {
         let mut price = self.price;
         let mut using_count = 0;
-        let mut coins = vec![];
         for (&value, &count) in COIN_VALUES.iter().zip(self.coins.iter()).rev() {
             let value = value as u32;
             let count = cmp::min(count, price / value);
             using_count += count;
             price -= value * count;
-            coins.push((value, count));
         }
-        coins.reverse();
-        println!("{:?}", coins);
         Ok(using_count)
     }
 }
