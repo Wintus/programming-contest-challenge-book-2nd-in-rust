@@ -28,6 +28,7 @@ impl Solvable for Problem {
             using_count += count;
             price -= value * count;
         }
+        debug_assert_eq!(0, price);
         Ok(using_count)
     }
 }
