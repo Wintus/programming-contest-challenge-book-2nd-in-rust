@@ -20,16 +20,37 @@ impl Solvable for Problem {
 
     /// 貪欲法
     fn solve(&self) -> Result<Self::O> {
-        let mut price = self.price;
-        let mut using_count = 0;
-        for (&value, &count) in COIN_VALUES.iter().zip(self.coins.iter()).rev() {
-            let value = value as u32;
-            let count = cmp::min(count, price / value);
-            using_count += count;
-            price -= value * count;
-        }
-        debug_assert_eq!(0, price);
-        Ok(using_count)
+        let price = self.price;
+        let coin_values: &[u16] = &COIN_VALUES;
+
+        let rev_value_count_pairs = coin_values
+            .iter()
+            .zip(self.coins.iter())
+            .rev();
+        // state = price remaining & used coin count
+        let counts = rev_value_count_pairs
+            .scan((price, 0), |state, (&value, &count)| {
+                println!("state: {:?}", state);
+                let (ref mut remaining, _) = *state;
+                let value = value as u32;
+                let count = cmp::min(count, *remaining / value);
+                *remaining -= value * count;
+                Some((*remaining, count))
+            });
+        let counts: Vec<_> = counts.collect();
+        println!("calc counts: {:?}", counts);
+        let used_coins: Vec<_> = coin_values
+            .iter()
+            .rev()
+            .zip(counts)
+            .map(|(value, (_, count))| (value, count))
+            .collect();
+        println!("used coins: {:?}", used_coins);
+        let count = used_coins
+            .iter()
+            .map(|&(_, count)| count)
+            .sum();
+        Ok(count)
     }
 }
 
