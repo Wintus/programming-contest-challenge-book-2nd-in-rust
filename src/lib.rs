@@ -55,3 +55,5 @@ mod shortest_path_of_maze;
 /// 2-2
 #[allow(dead_code)]
 mod coin_change;
+#[allow(dead_code)]
+mod term_scheduling;
