@@ -25,8 +25,9 @@ impl<'a> Solvable for Problem<'a> {
         let (_, n) = tasks
             .iter()
             .fold((0, 0), |(last_end_time, n_tasks), task| {
-                if task.0 > last_end_time {
-                    (task.1, n_tasks + 1) // one task done
+                let doable = task.0 > last_end_time;
+                if doable {
+                    (task.1, n_tasks + 1)
                 } else {
                     (last_end_time, n_tasks)
                 }
