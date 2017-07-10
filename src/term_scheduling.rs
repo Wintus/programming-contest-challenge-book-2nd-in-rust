@@ -22,16 +22,14 @@ impl<'a> Solvable for Problem<'a> {
         tasks.extend_from_slice(self.tasks);
         tasks.sort_by(|&(s0, e0), &(s1, e1)| (e0, s0).cmp(&(e1, s1)));
         // state = (end time of last selected task, number of task can be done so far)
-        let (_, n) = tasks
-            .iter()
-            .fold((0, 0), |(last_end_time, n_tasks), task| {
-                let doable = task.0 > last_end_time;
-                if doable {
-                    (task.1, n_tasks + 1)
-                } else {
-                    (last_end_time, n_tasks)
-                }
-            });
+        let (_, n) = tasks.iter().fold((0, 0), |(last_end_time, n_tasks), task| {
+            let doable = task.0 > last_end_time;
+            if doable {
+                (task.1, n_tasks + 1)
+            } else {
+                (last_end_time, n_tasks)
+            }
+        });
         Ok(n)
     }
 }
