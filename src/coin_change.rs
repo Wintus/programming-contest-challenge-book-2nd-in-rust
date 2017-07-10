@@ -59,22 +59,26 @@ impl Problem {
     }
 }
 
-#[test]
-fn test_case_0() {
-    let problem = Problem {
-        coins: [3, 2, 1, 3, 0, 2],
-        total: 620,
-    };
-    let used_coins = problem.solve().unwrap();
-    assert_eq!(6, Problem::count_coins(used_coins));
-}
+mod tests {
+    use super::*;
 
-#[test]
-fn test_case_1() {
-    let problem = Problem {
-        coins: [1, 1, 4, 5, 1, 4],
-        total: 810,
-    };
-    let used_coins = problem.solve().unwrap();
-    assert_eq!(7, Problem::count_coins(used_coins));
+    #[test]
+    fn test_case_0() {
+        let problem = Problem {
+            coins: [3, 2, 1, 3, 0, 2],
+            total: 620,
+        };
+        let used_coins = problem.solve().unwrap();
+        assert_eq!(6, Problem::count_coins(used_coins));
+    }
+
+    #[test]
+    fn test_case_1() {
+        let problem = Problem {
+            coins: [1, 1, 4, 5, 1, 4],
+            total: 810,
+        };
+        let used_coins = problem.solve().unwrap();
+        assert_eq!(7, Problem::count_coins(used_coins));
+    }
 }
