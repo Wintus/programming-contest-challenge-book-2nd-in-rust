@@ -18,28 +18,21 @@ impl<'a> Solvable for Problem<'a> {
 
         let mut deque: VecDeque<char> = self.input().chars().collect();
         while !deque.is_empty() {
-            let mut take_left = true;
+            println!("{:?}", deque);
 
             // 左と右のうち小さいほうを取る。
             // ただし同値ならば、内側のペアで比較する。
-            let mut deq = deque.clone();
-            while deq.len() >= 2 {
-                let first = deq.pop_front().unwrap();
-                let last = deq.pop_back().unwrap();
-                match first.cmp(&last) {
-                    Ordering::Less => {
-                        take_left = true;
-                        break;
-                    },
-                    Ordering::Greater => {
-                        take_left = false;
-                        break;
-                    },
-                    _ => {},
-                };
-            }
+            let deq = deque.clone();
+            let pairs = fold_half(deq);
+            println!("{:?}", pairs);
+            let left = pairs.into_iter()
+                            .map(|(first, last)| first.cmp(&last))
+                            .find(|&ord| ord != Ordering::Equal)
+                            .map(|ord| ord < Ordering::Equal)
+                            .unwrap_or(true);
+            println!("{}", if left { "<-" } else { "->" });
 
-            let c = if take_left { deque.pop_front() } else { deque.pop_back() };
+            let c = if left { deque.pop_front() } else { deque.pop_back() };
             line.push(c.unwrap());
         }
         Ok(line)
