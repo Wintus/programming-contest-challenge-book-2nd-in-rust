@@ -18,7 +18,6 @@ impl<'a> Solvable for Problem<'a> {
 
         let mut deque: VecDeque<char> = self.input().chars().collect();
         while !deque.is_empty() {
-            println!("deque: {:?}", deque);
             let mut take_left = true;
 
             // 左と右のうち小さいほうを取る。
@@ -27,7 +26,6 @@ impl<'a> Solvable for Problem<'a> {
             while deq.len() >= 2 {
                 let first = deq.pop_front().unwrap();
                 let last = deq.pop_back().unwrap();
-                println!("comparing: {} <=> {} in {:?}", first, last, deq);
                 match first.cmp(&last) {
                     Ordering::Less => {
                         take_left = true;
@@ -40,7 +38,6 @@ impl<'a> Solvable for Problem<'a> {
                     _ => true,
                 };
             }
-            println!("take {}", if take_left { "<=" } else { "=>" });
 
             let c = if take_left { deque.pop_front() } else { deque.pop_back() };
             line.push(c.unwrap());
