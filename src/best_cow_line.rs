@@ -55,3 +55,9 @@ fn test_case_0() {
     let p = Problem { line: "ACDBCB" };
     assert_eq!("ABCBCD", &p.solve().unwrap_or("".to_string()));
 }
+
+#[test]
+fn test_case_1() {
+    let p = Problem { line: "ABCCBA" };
+    assert_eq!("AABBCC", &p.solve().unwrap_or("".to_string()));
+}
