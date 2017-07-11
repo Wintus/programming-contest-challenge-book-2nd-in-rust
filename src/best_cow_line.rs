@@ -18,8 +18,9 @@ impl<'a> Solvable for Problem<'a> {
 
         let mut deque: VecDeque<char> = self.input().chars().collect();
         while !deque.is_empty() {
-            // 左と右のうち小さいほうを取る。
+            // 左右両端のうち小さいほうを取る。
             // ただし同値ならば、内側のペアで比較する。
+            // 最後まで決まらないなら、左優先
             let pairs = fold_half(&deque);
             let left = pairs.into_iter()
                             .map(|(first, last)| first.cmp(&last))
@@ -33,6 +34,7 @@ impl<'a> Solvable for Problem<'a> {
     }
 }
 
+/// make pairs from two ends
 fn fold_half<T>(vec: &VecDeque<T>) -> Vec<(T, T)>
     where T: Copy
 {
