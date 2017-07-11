@@ -34,17 +34,7 @@ impl<'a> Solvable for Problem<'a> {
     }
 }
 
-// FIXME: broken doc-test
 // FIXME: arg will be moved
-/// # Examples
-///
-/// ```no-run
-/// use std::collections::VecDeque;
-///
-/// let deque: VecDeque<_> = (0..4).collect();
-/// let pairs = fold_half(deque);
-/// assert_eq!(vec![(0, 3), (1, 2)], pairs);
-/// ```
 fn fold_half<T>(vec: VecDeque<T>) -> Vec<(T, T)> {
     let mut vec: Vec<_> = vec.into_iter().collect();
     let len = vec.len() / 2;
@@ -53,6 +43,13 @@ fn fold_half<T>(vec: VecDeque<T>) -> Vec<(T, T)> {
     let from_first = vec.into_iter();
     let pairs = from_first.zip(from_last);
     pairs.collect()
+}
+
+#[test]
+fn test_fold_half() {
+    let deque: VecDeque<_> = (0..4).collect();
+    let pairs = fold_half(deque);
+    assert_eq!(vec![(0, 3), (1, 2)], pairs);
 }
 
 
