@@ -35,7 +35,7 @@ impl<'a> Solvable for Problem<'a> {
                         take_left = false;
                         break;
                     },
-                    _ => true,
+                    _ => {},
                 };
             }
 
