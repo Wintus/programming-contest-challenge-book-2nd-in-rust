@@ -57,3 +57,7 @@ mod shortest_path_of_maze;
 mod coin_change;
 #[allow(dead_code)]
 mod term_scheduling;
+
+/// minimize given string in dictionary order
+#[allow(dead_code)]
+mod best_cow_line;
