@@ -21,7 +21,7 @@ impl<'a> Solvable for Problem<'a> {
             // 左と右のうち小さいほうを取る。
             // ただし同値ならば、内側のペアで比較する。
             let deq = deque.clone();
-            let pairs = fold_half(deq);
+            let pairs = fold_half_once(deq);
             let left = pairs.into_iter()
                             .map(|(first, last)| first.cmp(&last))
                             .find(|&ord| ord != Ordering::Equal)
@@ -34,8 +34,8 @@ impl<'a> Solvable for Problem<'a> {
     }
 }
 
-// FIXME: arg will be moved
-fn fold_half<T>(vec: VecDeque<T>) -> Vec<(T, T)> {
+/// arg will be moved
+fn fold_half_once<T>(vec: VecDeque<T>) -> Vec<(T, T)> {
     let mut vec: Vec<_> = vec.into_iter().collect();
     let len = vec.len() / 2;
     let last_half = vec.split_off(len);
@@ -46,9 +46,9 @@ fn fold_half<T>(vec: VecDeque<T>) -> Vec<(T, T)> {
 }
 
 #[test]
-fn test_fold_half() {
+fn test_fold_half_once() {
     let deque: VecDeque<_> = (0..4).collect();
-    let pairs = fold_half(deque);
+    let pairs = fold_half_once(deque);
     assert_eq!(vec![(0, 3), (1, 2)], pairs);
 }
 
