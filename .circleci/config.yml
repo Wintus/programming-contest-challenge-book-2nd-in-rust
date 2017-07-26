@@ -22,6 +22,12 @@ references:
     build_key: &build_key
       v1-dependencies-{{ checksum "Cargo.toml" }}
 
+    build_key_beta: &build_key_beta
+      v1-dependencies-beta-{{ checksum "Cargo.toml" }}
+
+    build_key_nightly: &build_key_nightly
+      v1-dependencies-nightly-{{ checksum "Cargo.toml" }}
+
   steps:
     save_sha: &save_sha
       name: save SHA to a file
@@ -40,6 +46,14 @@ references:
         - ~/.cargo
         - ~/.rustup
 
+    save_cache_of_beta_build: &save_cache_of_beta_build
+      <<: *save_cache_of_build
+      key: *build_key_beta
+
+    save_cache_of_nightly_build: &save_cache_of_nightly_build
+      <<: *save_cache_of_build
+      key: *build_key_nightly
+
     restore_cache_of_repo: &restore_cache_of_repo
       keys:
         - *repo_key
@@ -48,6 +62,16 @@ references:
     restore_cache_of_build: &restore_cache_of_build
       keys:
         - *build_key
+        - *build_key_default # fallback to using the latest cache if no exact match is found
+
+    restore_cache_of_beta_build: &restore_cache_of_beta_build
+      keys:
+        - *build_key_beta
+        - *build_key_default # fallback to using the latest cache if no exact match is found
+
+    restore_cache_of_nightly_build: &restore_cache_of_nightly_build
+      keys:
+        - *build_key_nightly
         - *build_key_default # fallback to using the latest cache if no exact match is found
 
 
@@ -99,7 +123,7 @@ jobs:
       # restore cache of dependencies
       - run: *save_sha
       - restore_cache: *restore_cache_of_repo
-      - restore_cache: *restore_cache_of_build
+      - restore_cache: *restore_cache_of_beta_build
 
       - run:
           name: install beta channel
@@ -111,7 +135,7 @@ jobs:
           command: |
             rustup run beta cargo build
 
-      - save_cache: *save_cache_of_build
+      - save_cache: *save_cache_of_beta_build
 
   test_beta:
     <<: *container_config
@@ -119,7 +143,7 @@ jobs:
       # restore cache of dependencies
       - run: *save_sha
       - restore_cache: *restore_cache_of_repo
-      - restore_cache: *restore_cache_of_build
+      - restore_cache: *restore_cache_of_beta_build
 
       - run:
           name: install beta channel
@@ -137,7 +161,7 @@ jobs:
       # restore cache of dependencies
       - run: *save_sha
       - restore_cache: *restore_cache_of_repo
-      - restore_cache: *restore_cache_of_build
+      - restore_cache: *restore_cache_of_nightly_build
 
       - run:
           name: install nightly channel
@@ -149,7 +173,7 @@ jobs:
           command: |
             rustup run nightly cargo build
 
-      - save_cache: *save_cache_of_build
+      - save_cache: *save_cache_of_nightly_build
 
   test_nightly:
     <<: *container_config
@@ -157,7 +181,7 @@ jobs:
       # restore cache of dependencies
       - run: *save_sha
       - restore_cache: *restore_cache_of_repo
-      - restore_cache: *restore_cache_of_build
+      - restore_cache: *restore_cache_of_nightly_build
 
       - run:
           name: install nightly channel
