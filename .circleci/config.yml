@@ -32,7 +32,7 @@ jobs:
             - v1-repo-
       - restore_cache: # of build
           keys:
-            - v1-dependencies-{{ checksum "Cargo.lock" }}
+            - v1-dependencies-{{ checksum "Cargo.toml" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
       - run:
@@ -40,7 +40,7 @@ jobs:
           command: |
             cargo build
       - save_cache:
-          key: v1-dependencies-{{ checksum "Cargo.lock" }}
+          key: v1-dependencies-{{ checksum "Cargo.toml" }}
           paths:
             - ~/.cargo
             - ~/.rustup
@@ -51,7 +51,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "Cargo.lock" }}
+            - v1-dependencies-{{ checksum "Cargo.toml" }}
             - v1-dependencies-
       - run:
           name: test library
