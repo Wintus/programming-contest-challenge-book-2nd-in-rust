@@ -93,6 +93,44 @@ jobs:
           command: |
             cargo test
 
+  build_nightly:
+    <<: *container_config
+    steps:
+      # restore cache of dependencies
+      - run: *save_sha
+      - restore_cache: *restore_cache_of_repo
+      - restore_cache: *restore_cache_of_build
+
+      - run:
+          name: install nightly channel
+          command: |
+            rustup install nightly
+
+      - run:
+          name: install depenedencies
+          command: |
+            rustup run nightly cargo build
+
+      - save_cache: *save_cache_of_build
+
+  test_nightly:
+    <<: *container_config
+    steps:
+      # restore cache of dependencies
+      - run: *save_sha
+      - restore_cache: *restore_cache_of_repo
+      - restore_cache: *restore_cache_of_build
+
+      - run:
+          name: install nightly channel
+          command: |
+            rustup install nightly
+
+      - run:
+          name: test library
+          command: |
+            rustup run nightly cargo test
+
 
 workflows:
   version: 2
@@ -100,9 +138,19 @@ workflows:
   build-and-test:
     jobs:
       - checkout_code
+
+      # parallel stable
       - build:
           requires:
             - checkout_code
       - test:
           requires:
             - build
+
+      # parallel nightly
+      - build_nightly:
+          requires:
+            - checkout_code
+      - test_nightly:
+          requires:
+            - build_nightly
