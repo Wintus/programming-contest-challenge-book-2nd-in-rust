@@ -24,8 +24,13 @@ jobs:
     <<: *container_config
     steps:
       - checkout
-      # Download and cache dependencies
-      - restore_cache:
+      # restore cache of dependencies
+      - restore_cache: # of repo
+          keys:
+            - v1-repo-{{ checksum ".circle-sha" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-repo-
+      - restore_cache: # of build
           keys:
             - v1-dependencies-{{ checksum "Cargo.lock" }}
             # fallback to using the latest cache if no exact match is found
