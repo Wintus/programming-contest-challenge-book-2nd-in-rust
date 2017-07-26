@@ -1,0 +1,68 @@
+version: 2.0
+
+references:
+
+  container_config: &container_config
+    docker:
+      - image: jimmycuadra/rust
+    working_directory: ~/PCCB
+
+jobs:
+  checkout_code:
+    <<: *container_config
+    steps:
+      - checkout
+      - run:
+          name: save SHA to a file
+          command: echo $CIRCLE_SHA1 > .circle-sha
+      - save_cache:
+          key: v1-repo-{{ checksum ".circle-sha" }}
+          paths:
+            - ~/PCCB
+
+  build:
+    <<: *container_config
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "Cargo.lock" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run:
+          name: install depenedencies
+          command: |
+            cargo build
+      - save_cache:
+          key: v1-dependencies-{{ checksum "Cargo.lock" }}
+          paths:
+            - ~/.cargo
+            - ~/.rustup
+
+  test:
+    <<: *container_config
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "Cargo.lock" }}
+            - v1-dependencies-
+      - run:
+          name: test library
+          command: |
+            cargo test
+
+
+workflows:
+  version: 2
+
+  build-and-test:
+    jobs:
+      - checkout_code
+      - build:
+          requires:
+            - checkout_code
+      - test:
+          requires:
+            - build
