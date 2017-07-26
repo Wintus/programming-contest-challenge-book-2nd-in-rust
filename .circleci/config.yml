@@ -1,70 +1,93 @@
 version: 2.0
 
 references:
+  working_directory: &working_directory
+    ~/PCCB
 
   container_config: &container_config
+    working_directory: *working_directory
     docker:
       - image: jimmycuadra/rust
-    working_directory: ~/PCCB
+
+  cache_keys:
+    repo_key_default: &repo_key_default
+      v1-repo-
+
+    repo_key: &repo_key
+      v1-repo-{{ checksum ".circle-sha" }}
+
+    build_key_default: &build_key_default
+      v1-dependencies-
+
+    build_key: &build_key
+      v1-dependencies-{{ checksum "Cargo.toml" }}
+
+  steps:
+    save_sha: &save_sha
+      name: save SHA to a file
+      command: |
+        echo $CIRCLE_SHA1 > .circle-sha
+
+    # after save_sha
+    save_cache_of_repo: &save_cache_of_repo
+      key: *repo_key
+      paths:
+        - *working_directory
+
+    save_cache_of_build: &save_cache_of_build
+      key: *build_key
+      paths:
+        - ~/.cargo
+        - ~/.rustup
+
+    restore_cache_of_repo: &restore_cache_of_repo
+      keys:
+        - *repo_key
+        - *repo_key_default # fallback to using the latest cache if no exact match is found
+
+    restore_cache_of_build: &restore_cache_of_build
+      keys:
+        - *build_key
+        - *build_key_default # fallback to using the latest cache if no exact match is found
+
 
 jobs:
   checkout_code:
     <<: *container_config
     steps:
       - checkout
-      - run:
-          name: save SHA to a file
-          command: echo $CIRCLE_SHA1 > .circle-sha
-      - save_cache:
-          key: v1-repo-{{ checksum ".circle-sha" }}
-          paths:
-            - ~/PCCB
+      - run: *save_sha
+      - save_cache: *save_cache_of_repo
 
   build:
     <<: *container_config
     steps:
       # uncomment for local test
       #- checkout
+
       # restore cache of dependencies
-      - run:
-          name: save SHA to a file
-          command: echo $CIRCLE_SHA1 > .circle-sha
-      - restore_cache: # of repo
-          keys:
-            - v1-repo-{{ checksum ".circle-sha" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-repo-
-      - restore_cache: # of build
-          keys:
-            - v1-dependencies-{{ checksum "Cargo.toml" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+      - run: *save_sha
+      - restore_cache: *restore_cache_of_repo
+      - restore_cache: *restore_cache_of_build
+
       - run:
           name: install depenedencies
           command: |
             cargo build
-      - save_cache:
-          key: v1-dependencies-{{ checksum "Cargo.toml" }}
-          paths:
-            - ~/.cargo
-            - ~/.rustup
+
+      - save_cache: *save_cache_of_build
 
   test:
     <<: *container_config
     steps:
       # uncomment for local test
       #- checkout
-      - run:
-          name: save SHA to a file
-          command: echo $CIRCLE_SHA1 > .circle-sha
-      - restore_cache: # of repo
-          keys:
-            - v1-repo-{{ checksum ".circle-sha" }}
-            - v1-repo-
-      - restore_cache: # of build
-          keys:
-            - v1-dependencies-{{ checksum "Cargo.toml" }}
-            - v1-dependencies-
+
+      # restore cache of dependencies
+      - run: *save_sha
+      - restore_cache: *restore_cache_of_repo
+      - restore_cache: *restore_cache_of_build
+
       - run:
           name: test library
           command: |
