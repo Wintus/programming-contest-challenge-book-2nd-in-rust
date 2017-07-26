@@ -93,6 +93,44 @@ jobs:
           command: |
             cargo test
 
+  build_beta:
+    <<: *container_config
+    steps:
+      # restore cache of dependencies
+      - run: *save_sha
+      - restore_cache: *restore_cache_of_repo
+      - restore_cache: *restore_cache_of_build
+
+      - run:
+          name: install beta channel
+          command: |
+            rustup install beta
+
+      - run:
+          name: install depenedencies
+          command: |
+            rustup run beta cargo build
+
+      - save_cache: *save_cache_of_build
+
+  test_beta:
+    <<: *container_config
+    steps:
+      # restore cache of dependencies
+      - run: *save_sha
+      - restore_cache: *restore_cache_of_repo
+      - restore_cache: *restore_cache_of_build
+
+      - run:
+          name: install beta channel
+          command: |
+            rustup install beta
+
+      - run:
+          name: test library
+          command: |
+            rustup run beta cargo test
+
   build_nightly:
     <<: *container_config
     steps:
@@ -146,6 +184,14 @@ workflows:
       - test:
           requires:
             - build
+
+      # parallel beta
+      - build_beta:
+          requires:
+            - checkout_code
+      - test_beta:
+          requires:
+            - build_beta
 
       # parallel nightly
       - build_nightly:
