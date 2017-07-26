@@ -146,11 +146,6 @@ jobs:
       - restore_cache: *restore_cache_of_beta_build
 
       - run:
-          name: install beta channel
-          command: |
-            rustup install beta
-
-      - run:
           name: test library
           command: |
             rustup run beta cargo test
@@ -182,11 +177,6 @@ jobs:
       - run: *save_sha
       - restore_cache: *restore_cache_of_repo
       - restore_cache: *restore_cache_of_nightly_build
-
-      - run:
-          name: install nightly channel
-          command: |
-            rustup install nightly
 
       - run:
           name: test library
